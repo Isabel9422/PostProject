@@ -30,10 +30,10 @@ export default class Usuario extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  // @beforeSave()
-  // public static async hashPassword(users: Usuario) {
-  //   if (users.$dirty.password) {
-  //     users.password = await Hash.make(users.password)
-  //   }
-  // }
+  @beforeSave()
+  public static async hashPassword(users: Usuario) {
+    if (users.$dirty.password) {
+      users.password = await Hash.make(users.password)
+    }
+  }
 }
