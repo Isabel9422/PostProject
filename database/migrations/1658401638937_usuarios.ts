@@ -9,9 +9,10 @@ export default class UsuariosSchema extends BaseSchema {
       table.string('nombre')
       table.string('apellidos')
       table.string('username', 50).notNullable().unique()
-      table.string('roles').notNullable
+      table.string('rol').notNullable
       table.string('email', 255).notNullable().unique()
       table.string('password', 180).notNullable()
+      table.enum('rol', Object.values(Roles)).defaultTo('GUEST')
       table.string('remember_me_token').nullable()
 
       /**

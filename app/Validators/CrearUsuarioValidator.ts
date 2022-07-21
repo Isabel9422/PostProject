@@ -6,14 +6,20 @@ export default class CrearUsuarioValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    name: schema.string({}),
-    surname: schema.string({}),
+    nombre: schema.string({}),
+    apellidos: schema.string({}),
+    username: schema.string({}, [
+      rules.maxLength(50),
+      rules.unique({ table: 'usuarios', column: 'username'})
+    ]),
     email: schema.string({}, [
       rules.email(),
       rules.maxLength(255),
-      rules.unique({ table: 'users', column: 'email' }),
+      rules.unique({ table: 'usuarios', column: 'email' }),
     ]),
     password: schema.string(),
+    rol: schema.enum
+    
   })
   public messages: CustomMessages = {}
 }

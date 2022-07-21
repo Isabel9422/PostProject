@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
+import Articulo from './Articulo'
 
 export default class Usuario extends BaseModel {
   @column({ isPrimary: true })
@@ -19,7 +20,10 @@ export default class Usuario extends BaseModel {
   public email: string
 
   @column()
-  public roles: Roles //Enum admin, escritor, revisor, guest
+  public rol: Roles //Enum admin, escritor, revisor, guest
+
+  @hasMany(() => Articulo, { foreignKey: 'articuloId' })
+  public articulos: HasMany<typeof Articulo>
 
   @column({ serializeAs: null })
   public password: string

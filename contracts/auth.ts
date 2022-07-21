@@ -5,7 +5,7 @@
  * file.
  */
 
-import Usuario from 'App/Models/Usuario'
+import usuarios from 'App/Models/usuarios'
 
 declare module '@ioc:Adonis/Addons/Auth' {
   /*
@@ -34,8 +34,8 @@ declare module '@ioc:Adonis/Addons/Auth' {
     |
     */
     user: {
-      implementation: LucidProviderContract<typeof Usuario>
-      config: LucidProviderConfig<typeof Usuario>
+      implementation: LucidProviderContract<typeof usuarios>
+      config: LucidProviderConfig<typeof usuarios>
     }
   }
 
@@ -57,16 +57,16 @@ declare module '@ioc:Adonis/Addons/Auth' {
   interface GuardsList {
     /*
     |--------------------------------------------------------------------------
-    | Basic Auth Guard
+    | OAT Guard
     |--------------------------------------------------------------------------
     |
-    | The basic guard uses basic auth for maintaining user login state. It uses
-    | the `user` provider for fetching user details.
+    | OAT, stands for (Opaque access tokens) guard uses database backed tokens
+    | to authenticate requests.
     |
     */
-    basic: {
-      implementation: BasicAuthGuardContract<'user', 'basic'>
-      config: BasicAuthGuardConfig<'user'>
+    api: {
+      implementation: OATGuardContract<'user', 'api'>
+      config: OATGuardConfig<'user'>
     }
   }
 }
