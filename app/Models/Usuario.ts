@@ -16,7 +16,7 @@ export default class Usuario extends BaseModel {
   public email: string
 
   @column()
-  public roles: Roles //Enum admin, escritor, revisor, sinPrivilegios
+  public roles: Roles //Enum admin, escritor, revisor, guest
 
   @column({ serializeAs: null })
   public password: string
@@ -31,9 +31,9 @@ export default class Usuario extends BaseModel {
   public updatedAt: DateTime
 
   @beforeSave()
-  public static async hashPassword(users: Usuario) {
-    if (users.$dirty.password) {
-      users.password = await Hash.make(users.password)
+  public static async hashPassword(usuarios: Usuario) {
+    if (usuarios.$dirty.password) {
+      usuarios.password = await Hash.make(usuarios.password)
     }
   }
 }
