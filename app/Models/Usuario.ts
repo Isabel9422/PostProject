@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
-import { Hash } from '@adonisjs/core/build/standalone'
+import Hash from '@ioc:Adonis/Core/Hash'
 
 export default class Usuario extends BaseModel {
   @column({ isPrimary: true })
@@ -11,6 +11,9 @@ export default class Usuario extends BaseModel {
 
   @column()
   public apellidos: string
+
+  @column()
+  public username: string
 
   @column()
   public email: string
