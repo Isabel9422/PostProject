@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-enum Roles {
+export enum Roles {
   admin = 'ADMIN',
   escritor = 'ESCRITOR',
   revisor = 'REVISOR',

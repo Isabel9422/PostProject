@@ -22,7 +22,7 @@ export default class Usuario extends BaseModel {
   @column()
   public rol: Roles //Enum admin, escritor, revisor, guest
 
-  @hasMany(() => Articulo, { foreignKey: 'articuloId' })
+  @hasMany(() => Articulo, { foreignKey: 'usuarioId' })
   public articulos: HasMany<typeof Articulo>
 
   @column({ serializeAs: null })

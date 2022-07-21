@@ -1,6 +1,7 @@
 import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules } from '@ioc:Adonis/Core/Validator'
+import { Roles } from '../Models/Enums/roles'
 
 export default class CrearUsuarioValidator {
   constructor(protected ctx: HttpContextContract) {}
@@ -10,16 +11,15 @@ export default class CrearUsuarioValidator {
     apellidos: schema.string({}),
     username: schema.string({}, [
       rules.maxLength(50),
-      rules.unique({ table: 'usuarios', column: 'username'})
+      rules.unique({ table: 'usuarios', column: 'username' }),
     ]),
     email: schema.string({}, [
       rules.email(),
       rules.maxLength(255),
       rules.unique({ table: 'usuarios', column: 'email' }),
     ]),
+    rol: schema.enum(Object.values(Roles)),
     password: schema.string(),
-    rol: schema.enum
-    
   })
   public messages: CustomMessages = {}
 }

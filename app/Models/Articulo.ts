@@ -13,6 +13,12 @@ export default class Articulo extends BaseModel {
   @column()
   public descripcion: string
 
+  @column()
+  public usuarioId: number
+
+  @column()
+  public categoriaId: number
+
   @belongsTo(() => Categoria)
   public categoria: BelongsTo<typeof Categoria>
 

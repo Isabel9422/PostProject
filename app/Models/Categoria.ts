@@ -9,7 +9,7 @@ export default class Categoria extends BaseModel {
   @column()
   public nombre: string
 
-  @hasMany(() => Articulo)
+  @hasMany(() => Articulo, { foreignKey: 'categoriaId' })
   public articulos: HasMany<typeof Articulo>
 
   @column.dateTime({ autoCreate: true })

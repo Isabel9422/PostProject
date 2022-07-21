@@ -13,6 +13,11 @@ export default class UsuariosController {
     }
   }
 
+  public async index({ response }: HttpContextContract) {
+    const usuarios = await Usuario.all()
+    return response.json(usuarios)
+  }
+
   public async store({ request, response }: HttpContextContract) {
     const validateData = await request.validate(CrearUsuarioValidator)
     const usuario = await Usuario.create(validateData)
