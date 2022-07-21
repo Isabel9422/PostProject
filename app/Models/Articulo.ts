@@ -20,10 +20,10 @@ export default class Articulo extends BaseModel {
   public categoriaId: number
 
   @belongsTo(() => Categoria)
-  public categoria: BelongsTo<typeof Categoria>
+  public categorias: BelongsTo<typeof Categoria>
 
   @belongsTo(() => Usuario)
-  public usuario: BelongsTo<typeof Usuario>
+  public usuarios: BelongsTo<typeof Usuario>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
