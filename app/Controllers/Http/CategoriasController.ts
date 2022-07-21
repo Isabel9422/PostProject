@@ -32,6 +32,6 @@ export default class CategoriasController {
   public async destroy({ request, response }: HttpContextContract) {
     const categoria = await Categoria.findByOrFail('id', request.params().id)
     await categoria.delete()
-    return response.ok('Technology deleted')
+    return response.ok('Categoria eliminada')
   }
 }

@@ -7,13 +7,10 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.string('titulo', 50).notNullable().unique()
-      table.string('descripcion').notNullable()
-      table.integer('usuarioId')
-      table.integer('categoriaId').notNullable()
+      table.string('descripcion').notNullable().defaultTo('')
+      table.integer('usuario_id')
+      table.integer('categoria_id').notNullable()
 
-      /**
-       * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-       */
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

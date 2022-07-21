@@ -13,6 +13,15 @@ export default class UsuariosController {
     }
   }
 
+  public async show({ response, request }: HttpContextContract) {
+    try {
+      const usuario = await Usuario.findBy('id', request.params().id)
+      return response.json(usuario)
+    } catch (error) {
+      return response.badRequest({ error: error.message })
+    }
+  }
+
   public async index({ response }: HttpContextContract) {
     const usuarios = await Usuario.all()
     return response.json(usuarios)
@@ -22,5 +31,17 @@ export default class UsuariosController {
     const validateData = await request.validate(CrearUsuarioValidator)
     const usuario = await Usuario.create(validateData)
     return response.created({ data: usuario })
+  }
+
+  public async update({ request, response }: HttpContextContract) {
+    const usuario = await Usuario.findByOrFail('id', request.params().id)
+    await usuario.merge(request.all()).save()
+    return response.ok({ data: usuario })
+  }
+
+  public async destroy({ request, response }: HttpContextContract) {
+    const usuario = await Usuario.findByOrFail('id', request.params().id)
+    await usuario.delete()
+    return response.ok('Usuario eliminado')
   }
 }

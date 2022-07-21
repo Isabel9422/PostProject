@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, beforeSave, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Articulo from './Articulo'
+import { Roles } from './Enums/roles'
 
 export default class Usuario extends BaseModel {
   @column({ isPrimary: true })
