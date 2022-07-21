@@ -1,15 +1,19 @@
 import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Estados } from 'App/Models/Enums/estados'
 
-export default class CrearArticuloValidator {
+export default class SortPostValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    titulo: schema.string({}),
-    descripcion: schema.string({}),
-    categoriaId: schema.number(),
-    estado: schema.enum(Object.values(Estados)),
+    order: schema.enum.optional(['asc', 'desc'] as const),
+    sort: schema.enum.optional([
+      'id',
+      'titulo',
+      'description',
+      'usuarioId',
+      'categoriaId',
+      'estado',
+    ]),
   })
 
   public messages: CustomMessages = {}

@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Categoria from './Categoria'
 import Usuario from './Usuario'
+import { Estados } from './Enums/estados'
 
 export default class Articulo extends BaseModel {
   @column({ isPrimary: true })
@@ -12,6 +13,9 @@ export default class Articulo extends BaseModel {
 
   @column()
   public descripcion: string
+
+  @column()
+  public estado: Estados
 
   @column()
   public usuarioId: number
