@@ -15,7 +15,7 @@ export default class ArticulosController {
 
     const articulos = await Articulo.query()
       .if(titulo, (query) => query.where('titulo', 'like', `%${titulo}%`))
-      .if(usuarioId, (query) => query.where('categoria_id', usuarioId))
+      .if(usuarioId, (query) => query.where('usuario_id', usuarioId))
       .if(categoriaId, (query) => query.where('categoria_id', categoriaId))
       .if(estado, (query) => query.where('estado', 'like', `%${estado}%`))
       .orderBy(sort, order)
