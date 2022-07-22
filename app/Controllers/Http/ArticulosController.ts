@@ -59,6 +59,6 @@ export default class ArticulosController {
     const articulo = await Articulo.findByOrFail('id', request.params().id)
     await bouncer.authorize('deletePost')
     await articulo.delete()
-    return response.ok('Articulo eliminada')
+    return response.ok('Articulo eliminado')
   }
 }

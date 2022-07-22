@@ -60,8 +60,8 @@ export const { actions } = Bouncer.before((usuario: Usuario | null) => {
     if (articulos.estado === 'PUBLICADO') {
       return true
     } else if (
-      articulos.estado === 'PROPUESTA' ||
-      (articulos.estado === 'RECHAZADO' && usuario?.rol === 'ESCRITOR')
+      (articulos.estado === 'PROPUESTA' || articulos.estado === 'RECHAZADO') &&
+      usuario?.rol === 'ESCRITOR'
     ) {
       return true
     } else if (articulos.estado === 'PENDIENTE_REVISION' && usuario?.rol === 'REVISOR') {
@@ -76,8 +76,8 @@ export const { actions } = Bouncer.before((usuario: Usuario | null) => {
       if (articulos.estado === 'PUBLICADO') {
         return true
       } else if (
-        articulos.estado === 'PROPUESTA' ||
-        (articulos.estado === 'RECHAZADO' && usuario?.rol === 'ESCRITOR')
+        (articulos.estado === 'PROPUESTA' || articulos.estado === 'RECHAZADO') &&
+        usuario?.rol === 'ESCRITOR'
       ) {
         return true
       } else if (articulos.estado === 'PENDIENTE_REVISION' && usuario?.rol === 'REVISOR') {
