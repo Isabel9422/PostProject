@@ -20,7 +20,7 @@ export default class ArticulosController {
       .if(estado, (query) => query.where('estado', 'like', `%${estado}%`))
       .orderBy(sort, order)
 
-    // await bouncer.authorize('viewPost', articulos)
+    // await bouncer.authorize('viewPost', articulos)  Es necesario?
 
     response.ok({ data: articulos })
   }
@@ -41,12 +41,6 @@ export default class ArticulosController {
     }
   }
 
-  /*  public async store({ request, response }: HttpContextContract) {
-    const validateData = await request.validate(CrearArticuloValidator)
-    const articulo = await Articulo.create(validateData)
-    return response.created({ data: articulo })
-  }*/
-
   public async store({ request, response, bouncer }: HttpContextContract) {
     await bouncer.authorize('createPost')
     const validateData = await request.validate(CrearArticuloValidator)
@@ -54,14 +48,16 @@ export default class ArticulosController {
     return response.created({ data: articulo })
   }
 
-  public async update({ request, response }: HttpContextContract) {
+  public async update({ request, response, bouncer }: HttpContextContract) {
     const articulo = await Articulo.findByOrFail('id', request.params().id)
+    await bouncer.authorize('editPost', articulo)
     await articulo.merge(request.all()).save()
     return response.ok({ data: articulo })
   }
 
-  public async destroy({ request, response }: HttpContextContract) {
+  public async destroy({ request, response, bouncer }: HttpContextContract) {
     const articulo = await Articulo.findByOrFail('id', request.params().id)
+    await bouncer.authorize('deletePost')
     await articulo.delete()
     return response.ok('Articulo eliminada')
   }

@@ -52,6 +52,24 @@ export const { actions } = Bouncer.before((usuario: Usuario | null) => {
     return usuario.rol === 'ADMIN'
   })
 
+  .define('deletePost', (usuario: Usuario) => {
+    return usuario.rol === 'ADMIN'
+  })
+
+  .define('editPost', (usuario: Usuario, articulos: Articulo) => {
+    if (articulos.estado === 'PUBLICADO') {
+      return true
+    } else if (
+      articulos.estado === 'PROPUESTA' ||
+      (articulos.estado === 'RECHAZADO' && usuario?.rol === 'ESCRITOR')
+    ) {
+      return true
+    } else if (articulos.estado === 'PENDIENTE_REVISION' && usuario?.rol === 'REVISOR') {
+      return true
+    }
+    return Bouncer.deny('El artículo no esta publicado', 404)
+  })
+
   .define(
     'viewPost',
     (usuario: Usuario | null, articulos: Articulo) => {

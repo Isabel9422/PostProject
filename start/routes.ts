@@ -9,6 +9,8 @@ Route.group(() => {
 
 Route.post('/posts', 'ArticulosController.store').middleware('auth')
 
-Route.get('/posts', 'ArticulosController.index').middleware('auth')
+Route.patch('/posts', 'ArticulosController.index').middleware('auth')
+
+Route.delete('/posts', 'ArticulosController.index').middleware('auth')
 
 Route.get('/posts/:id', 'ArticulosController.show').middleware('auth')
