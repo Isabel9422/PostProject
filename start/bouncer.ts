@@ -34,12 +34,12 @@ import Logger from '@ioc:Adonis/Core/Logger'
 |****************************************************************
 */
 export const { actions } = Bouncer.before((usuario: Usuario | null) => {
-  if (usuario?.rol === 'ADMIN') {
+  if (usuario?.rol === Roles.admin) {
     return true
   }
 })
   .after((usuario: Usuario | null, actionName, actionResult) => {
-    const userType = usuario ? Usuario : 'ESCRITOR'
+    const userType = usuario ? usuario.rol : 'GUEST'
 
     actionResult.authorized
       ? Logger.info(`${userType} fue autorizado para ${actionName}`)
@@ -49,16 +49,23 @@ export const { actions } = Bouncer.before((usuario: Usuario | null) => {
   })
 
   .define('createPost', (usuario: Usuario) => {
-    return [Roles.admin].includes(usuario.rol)
+    return usuario.rol === 'ADMIN'
   })
 
   .define(
     'viewPost',
-    (usuario: Usuario | null, articulo: Articulo) => {
-      if (!(articulo.estado === 'PUBLICADO')) {
-        return Bouncer.deny('El artículo aún no ha sido publicado', 404)
+    (usuario: Usuario | null, articulos: Articulo) => {
+      if (articulos.estado === 'PUBLICADO') {
+        return true
+      } else if (
+        articulos.estado === 'PROPUESTA' ||
+        (articulos.estado === 'RECHAZADO' && usuario?.rol === 'ESCRITOR')
+      ) {
+        return true
+      } else if (articulos.estado === 'PENDIENTE_REVISION' && usuario?.rol === 'REVISOR') {
+        return true
       }
-      return true
+      return Bouncer.deny('El artículo no esta publicado', 404)
     },
     { allowGuest: true }
   )

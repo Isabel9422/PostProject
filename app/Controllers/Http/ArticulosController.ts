@@ -4,7 +4,7 @@ import CrearArticuloValidator from 'App/Validators/CrearArticuloValidator'
 import SortPostValidator from 'App/Validators/SortPostValidator'
 
 export default class ArticulosController {
-  public async index({ response, request }: HttpContextContract) {
+  public async index({ response, request, bouncer }: HttpContextContract) {
     const titulo = request.input('titulo') ?? null
     const usuarioId = request.input('usuarioId') ?? null
     const categoriaId = request.input('categoriaId') ?? null
@@ -19,6 +19,9 @@ export default class ArticulosController {
       .if(categoriaId, (query) => query.where('categoria_id', categoriaId))
       .if(estado, (query) => query.where('estado', 'like', `%${estado}%`))
       .orderBy(sort, order)
+
+    // await bouncer.authorize('viewPost', articulos)
+
     response.ok({ data: articulos })
   }
 
