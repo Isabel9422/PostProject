@@ -22,20 +22,30 @@ export default class ArticulosController {
     response.ok({ data: articulos })
   }
 
-  public async show({ params: { id }, response }: HttpContextContract) {
+  public async show({ params: { id }, response, bouncer }: HttpContextContract) {
     try {
       const articulos = await Articulo.query()
         .where('id', id)
         .preload('usuarios')
         .preload('categorias')
         .firstOrFail()
+
+      await bouncer.authorize('viewPost', articulos)
+
       return response.json(articulos)
     } catch (error) {
       return response.badRequest({ error: error.message })
     }
   }
 
-  public async store({ request, response }: HttpContextContract) {
+  /*  public async store({ request, response }: HttpContextContract) {
+    const validateData = await request.validate(CrearArticuloValidator)
+    const articulo = await Articulo.create(validateData)
+    return response.created({ data: articulo })
+  }*/
+
+  public async store({ request, response, bouncer }: HttpContextContract) {
+    await bouncer.authorize('createPost')
     const validateData = await request.validate(CrearArticuloValidator)
     const articulo = await Articulo.create(validateData)
     return response.created({ data: articulo })

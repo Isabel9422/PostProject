@@ -9,6 +9,7 @@ import Bouncer from '@ioc:Adonis/Addons/Bouncer'
 import Articulo from 'App/Models/Articulo'
 import { Roles } from 'App/Models/Enums/roles'
 import Usuario from 'App/Models/Usuario'
+import Logger from '@ioc:Adonis/Core/Logger'
 
 /*
 |--------------------------------------------------------------------------
@@ -32,22 +33,35 @@ import Usuario from 'App/Models/Usuario'
 | NOTE: Always export the "actions" const from this file
 |****************************************************************
 */
-Bouncer.define('createPost', (usuario: Usuario) => {
-  return [Roles.admin].includes(usuario.rol)
-})
-
-Bouncer.define(
-  'viewPost',
-  (usuario: Usuario, articulo: Articulo) => {
-    if (!(articulo.estado === 'PUBLICADO')) {
-      return Bouncer.deny('El artículo aún no ha sido publicado', 404)
-    }
+export const { actions } = Bouncer.before((usuario: Usuario | null) => {
+  if (usuario?.rol === 'ADMIN') {
     return true
-  },
-  { allowGuest: true }
-)
+  }
+})
+  .after((usuario: Usuario | null, actionName, actionResult) => {
+    const userType = usuario ? Usuario : 'ESCRITOR'
 
-export const { actions } = Bouncer
+    actionResult.authorized
+      ? Logger.info(`${userType} fue autorizado para ${actionName}`)
+      : Logger.info(
+          `${userType} fue denegado para ${actionName} porque ${actionResult.errorResponse}`
+        )
+  })
+
+  .define('createPost', (usuario: Usuario) => {
+    return [Roles.admin].includes(usuario.rol)
+  })
+
+  .define(
+    'viewPost',
+    (usuario: Usuario | null, articulo: Articulo) => {
+      if (!(articulo.estado === 'PUBLICADO')) {
+        return Bouncer.deny('El artículo aún no ha sido publicado', 404)
+      }
+      return true
+    },
+    { allowGuest: true }
+  )
 
 /*
 |--------------------------------------------------------------------------

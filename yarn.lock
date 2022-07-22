@@ -5722,6 +5722,11 @@
     "media-typer" "0.3.0"
     "mime-types" "~2.1.24"
 
+"typescript-logger@^5.0.1":
+  "integrity" "sha512-914r9KOFRqw9yRoTNRrs9sWY+EtENKOMcXrsCm6p08S9s9FmsYXB5le27lhzWe7OtcH/pL2aP5WcDWkuNmHF1g=="
+  "resolved" "https://registry.npmjs.org/typescript-logger/-/typescript-logger-5.0.1.tgz"
+  "version" "5.0.1"
+
 "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta", "typescript@~4.6":
   "integrity" "sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg=="
   "resolved" "https://registry.npmjs.org/typescript/-/typescript-4.6.4.tgz"
