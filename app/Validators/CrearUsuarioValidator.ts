@@ -1,6 +1,6 @@
 import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Roles } from '../Models/Enums/roles'
+import { TipoRol } from '../Models/Enums/TipoRol'
 
 export default class CrearUsuarioValidator {
   constructor(protected ctx: HttpContextContract) {}
@@ -17,7 +17,7 @@ export default class CrearUsuarioValidator {
       rules.maxLength(255),
       rules.unique({ table: 'usuarios', column: 'email' }),
     ]),
-    rol: schema.enum(Object.values(Roles)),
+    TipoRol: schema.enum(Object.values(TipoRol)),
     password: schema.string(), //minlength, regex
   })
   public messages: CustomMessages = {}

@@ -7,7 +7,7 @@
 
 import Bouncer from '@ioc:Adonis/Addons/Bouncer'
 import Articulo from 'App/Models/Articulo'
-import { Roles } from 'App/Models/Enums/roles'
+import { TipoRol } from 'App/Models/Enums/TipoRol'
 import Usuario from 'App/Models/Usuario'
 import Logger from '@ioc:Adonis/Core/Logger'
 
@@ -34,12 +34,12 @@ import Logger from '@ioc:Adonis/Core/Logger'
 |****************************************************************
 */
 export const { actions } = Bouncer.before((usuario: Usuario | null) => {
-  if (usuario?.rol === Roles.admin) {
+  if (usuario?.tipoRol === TipoRol.admin) {
     return true
   }
 })
   .after((usuario: Usuario | null, actionName, actionResult) => {
-    const userType = usuario ? usuario.rol : 'GUEST'
+    const userType = usuario ? usuario.tipoRol : 'GUEST'
 
     actionResult.authorized
       ? Logger.info(`${userType} fue autorizado para ${actionName}`)
@@ -49,22 +49,22 @@ export const { actions } = Bouncer.before((usuario: Usuario | null) => {
   })
 
   .define('createPost', (usuario: Usuario) => {
-    return usuario.rol === 'ADMIN'
+    return usuario.tipoRol === 'ADMIN'
   })
 
   .define('deletePost', (usuario: Usuario) => {
-    return usuario.rol === 'ADMIN'
+    return usuario.tipoRol === 'ADMIN'
   })
 
   .define('editPost', (usuario: Usuario, articulos: Articulo) => {
-    if (articulos.estado === 'PUBLICADO') {
+    if (articulos.TipoEstado === 'PUBLICADO') {
       return true
     } else if (
-      (articulos.estado === 'PROPUESTA' || articulos.estado === 'RECHAZADO') &&
-      usuario?.rol === 'ESCRITOR'
+      (articulos.TipoEstado === 'PROPUESTA' || articulos.TipoEstado === 'RECHAZADO') &&
+      usuario?.tipoRol === 'ESCRITOR'
     ) {
       return true
-    } else if (articulos.estado === 'PENDIENTE_REVISION' && usuario?.rol === 'REVISOR') {
+    } else if (articulos.TipoEstado === 'PENDIENTE_REVISION' && usuario?.tipoRol === 'REVISOR') {
       return true
     }
     return Bouncer.deny('El artículo no esta publicado', 404)
@@ -73,14 +73,14 @@ export const { actions } = Bouncer.before((usuario: Usuario | null) => {
   .define(
     'viewPost',
     (usuario: Usuario | null, articulos: Articulo) => {
-      if (articulos.estado === 'PUBLICADO') {
+      if (articulos.TipoEstado === 'PUBLICADO') {
         return true
       } else if (
-        (articulos.estado === 'PROPUESTA' || articulos.estado === 'RECHAZADO') &&
-        usuario?.rol === 'ESCRITOR'
+        (articulos.TipoEstado === 'PROPUESTA' || articulos.TipoEstado === 'RECHAZADO') &&
+        usuario?.tipoRol === 'ESCRITOR'
       ) {
         return true
-      } else if (articulos.estado === 'PENDIENTE_REVISION' && usuario?.rol === 'REVISOR') {
+      } else if (articulos.TipoEstado === 'PENDIENTE_REVISION' && usuario?.tipoRol === 'REVISOR') {
         return true
       }
       return Bouncer.deny('El artículo no esta publicado', 404)

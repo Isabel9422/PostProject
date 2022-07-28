@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, beforeSave, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Articulo from './Articulo'
-import { Roles } from './Enums/roles'
+import { TipoRol } from './Enums/TipoRol'
 
 export default class Usuario extends BaseModel {
   @column({ isPrimary: true })
@@ -21,7 +21,7 @@ export default class Usuario extends BaseModel {
   public email: string
 
   @column()
-  public rol: Roles //Enum admin, escritor, revisor, guest
+  public tipoRol: TipoRol //Enum admin, escritor, revisor, guest
 
   @hasMany(() => Articulo, { foreignKey: 'usuarioId' })
   public articulos: HasMany<typeof Articulo>

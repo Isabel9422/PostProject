@@ -1,5 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import { Roles } from '../../app/Models/Enums/roles'
+import { TipoRol } from '../../app/Models/Enums/TipoRol'
 
 export default class UsuariosSchema extends BaseSchema {
   protected tableName = 'usuarios'
@@ -12,7 +12,7 @@ export default class UsuariosSchema extends BaseSchema {
       table.string('password', 180).notNullable()
       table.string('nombre')
       table.string('apellidos')
-      table.enum('rol', Object.values(Roles)).defaultTo('GUEST')
+      table.enum('rol', Object.values(TipoRol)).defaultTo('GUEST')
       table.string('remember_me_token').nullable()
 
       table.timestamp('created_at', { useTz: true }).notNullable()

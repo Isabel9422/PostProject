@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Categoria from './Categoria'
 import Usuario from './Usuario'
-import { Estados } from './Enums/estados'
+import { TipoEstado } from './Enums/TipoEstado'
 
 export default class Articulo extends BaseModel {
   @column({ isPrimary: true })
@@ -15,7 +15,7 @@ export default class Articulo extends BaseModel {
   public descripcion: string
 
   @column()
-  public estado: Estados
+  public TipoEstado: TipoEstado
 
   @column()
   public usuarioId: number
@@ -24,10 +24,10 @@ export default class Articulo extends BaseModel {
   public categoriaId: number
 
   @belongsTo(() => Categoria)
-  public categorias: BelongsTo<typeof Categoria>
+  public categoria: BelongsTo<typeof Categoria>
 
   @belongsTo(() => Usuario)
-  public usuarios: BelongsTo<typeof Usuario>
+  public usuario: BelongsTo<typeof Usuario>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

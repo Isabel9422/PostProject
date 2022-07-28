@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Usuario from 'App/Models/Usuario'
+import UpdateUserValidator from 'App/Validators/UpdateUserValidator'
 import CrearUsuarioValidator from '../../Validators/CrearUsuarioValidator'
 
 export default class UsuariosController {
@@ -7,7 +8,7 @@ export default class UsuariosController {
     const { email, password } = request.all()
     try {
       const token = await auth.attempt(email, password)
-      return { token: token, data: auth.user }
+      response.created({ token: token, data: auth.user })
     } catch (error) {
       return response.badRequest({ error: error.message })
     }
@@ -35,7 +36,9 @@ export default class UsuariosController {
 
   public async update({ request, response }: HttpContextContract) {
     const usuario = await Usuario.findByOrFail('id', request.params().id)
-    await usuario.merge(request.all()).save()
+    const validateData = await request.validate(UpdateUserValidator)
+    if (!validateData) response.badRequest
+    await usuario.merge(validateData).save()
     return response.ok({ data: usuario })
   }
 
