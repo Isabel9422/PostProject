@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, scope } from '@ioc:Adonis/Lucid/Orm'
 import Categoria from './Categoria'
 import Usuario from './Usuario'
 import { TipoEstado } from './Enums/TipoEstado'
+import { TipoRol } from './Enums/TipoRol'
 
 export default class Articulo extends BaseModel {
   @column({ isPrimary: true })
@@ -15,7 +16,7 @@ export default class Articulo extends BaseModel {
   public descripcion: string
 
   @column()
-  public TipoEstado: TipoEstado
+  public tipoEstado: TipoEstado
 
   @column()
   public usuarioId: number
@@ -34,4 +35,15 @@ export default class Articulo extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  public static visibleTo = scope((query, usuario: Usuario) => {
+    if (usuario.tipoRol === TipoRol.admin) {
+      return
+    } else if (usuario.tipoRol === TipoRol.escritor) {
+      return query.where('tipo_estado', 'PROPUESTA').orWhere('tipo_estado', 'RECHAZADO')
+    } else if (usuario.tipoRol === TipoRol.revisor) {
+      return query.where('tipo_estado', 'PENDIENTE_REVISION')
+    }
+    return query.where('tipo_estado', 'PUBLICADO')
+  })
 }

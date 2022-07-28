@@ -27,7 +27,10 @@ export default class CategoriasController {
   public async update({ request, response }: HttpContextContract) {
     const categoria = await Categoria.findByOrFail('id', request.params().id)
     const validateData = await request.validate(UpdateCategoriaValidator)
-    if (!validateData) response.badRequest
+    const isEmpty = Object.entries(validateData).length === 0
+    if (isEmpty) {
+      return response.badRequest()
+    }
     await categoria.merge(validateData).save()
     return response.ok({ data: categoria })
   }

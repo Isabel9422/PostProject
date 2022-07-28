@@ -9,7 +9,7 @@ export default class CrearArticuloValidator {
     titulo: schema.string({}),
     descripcion: schema.string({}),
     categoriaId: schema.number(),
-    tipoEstado: schema.enum(Object.values(TipoEstado)),
+    tipoEstado: schema.enum.optional(Object.values(TipoEstado)),
   })
 
   public messages: CustomMessages = {}

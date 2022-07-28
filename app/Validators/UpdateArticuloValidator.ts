@@ -28,7 +28,7 @@ export default class UpdateArticuloValidator {
     titulo: schema.string.optional({}),
     descripcion: schema.string.optional({}),
     categoriaId: schema.number.optional(),
-    TipoEstado: schema.enum.optional(Object.values(TipoEstado)),
+    tipoEstado: schema.enum.optional(Object.values(TipoEstado)),
   })
 
   public messages: CustomMessages = {}

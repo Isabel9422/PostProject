@@ -1,4 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import { TipoEstado } from 'App/Models/Enums/TipoEstado'
 
 export default class extends BaseSchema {
   protected tableName = 'articulos'
@@ -7,7 +8,8 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.string('titulo', 50).notNullable().unique()
-      table.string('descripcion').notNullable().defaultTo('')
+      table.text('descripcion').notNullable().defaultTo('')
+      table.enum('tipo_estado', Object.values(TipoEstado)).defaultTo('PROPUESTA')
       table.integer('usuario_id')
       table.integer('categoria_id').notNullable()
 

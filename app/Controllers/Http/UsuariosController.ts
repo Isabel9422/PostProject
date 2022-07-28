@@ -37,7 +37,10 @@ export default class UsuariosController {
   public async update({ request, response }: HttpContextContract) {
     const usuario = await Usuario.findByOrFail('id', request.params().id)
     const validateData = await request.validate(UpdateUserValidator)
-    if (!validateData) response.badRequest
+    const isEmpty = Object.entries(validateData).length === 0
+    if (isEmpty) {
+      return response.badRequest()
+    }
     await usuario.merge(validateData).save()
     return response.ok({ data: usuario })
   }

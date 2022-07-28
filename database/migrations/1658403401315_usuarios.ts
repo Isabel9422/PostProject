@@ -12,7 +12,7 @@ export default class UsuariosSchema extends BaseSchema {
       table.string('password', 180).notNullable()
       table.string('nombre')
       table.string('apellidos')
-      table.enum('rol', Object.values(TipoRol)).defaultTo('GUEST')
+      table.enum('tipo_rol', Object.values(TipoRol)).defaultTo('GUEST')
       table.string('remember_me_token').nullable()
 
       table.timestamp('created_at', { useTz: true }).notNullable()

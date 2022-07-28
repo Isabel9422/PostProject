@@ -5,7 +5,7 @@ import SortPostValidator from 'App/Validators/SortPostValidator'
 import UpdateArticuloValidator from 'App/Validators/UpdateArticuloValidator'
 
 export default class ArticulosController {
-  public async index({ response, request, bouncer }: HttpContextContract) {
+  public async index({ response, request, auth }: HttpContextContract) {
     const titulo = request.input('titulo') ?? null
     const usuarioId = request.input('usuarioId') ?? null
     const categoriaId = request.input('categoriaId') ?? null
@@ -15,19 +15,23 @@ export default class ArticulosController {
     const order = datosvalidados.order || 'asc'
 
     const articulos = await Articulo.query()
+      .withScopes((scopes) => {
+        if (auth.user) scopes.visibleTo(auth.user)
+      })
       .if(titulo, (query) => query.where('titulo', 'ILIKE', `%${titulo}%`))
       .if(usuarioId, (query) => query.where('usuario_id', usuarioId))
       .if(categoriaId, (query) => query.where('categoria_id', categoriaId))
-      .if(estado, (query) => query.where('TipoEstado', 'ILIKE', `%${estado}%`))
+      .if(estado, (query) => query.where('tipo_estado', 'ILIKE', `%${estado}%`))
       .orderBy(sort, order)
-
-    // await bouncer.authorize('viewPost', articulos)  Es necesario?
 
     response.ok({ data: articulos })
   }
 
-  public async show({ params: { id }, response, bouncer }: HttpContextContract) {
+  public async show({ params: { id }, response, bouncer, auth }: HttpContextContract) {
     const articulos = await Articulo.query()
+      .withScopes((scopes) => {
+        if (auth.user) scopes.visibleTo(auth.user)
+      })
       .where('id', id)
       .preload('usuario')
       .preload('categoria')
@@ -48,9 +52,12 @@ export default class ArticulosController {
 
   public async update({ request, response, bouncer }: HttpContextContract) {
     const articulo = await Articulo.findByOrFail('id', request.params().id)
-    const validateData = await request.validate(UpdateArticuloValidator)
     await bouncer.authorize('editPost', articulo)
-    if (!validateData) response.badRequest
+    const validateData = await request.validate(UpdateArticuloValidator)
+    const isEmpty = Object.entries(validateData).length === 0
+    if (isEmpty) {
+      return response.badRequest()
+    }
     await articulo.merge(validateData).save()
     return response.ok({ data: articulo })
   }
