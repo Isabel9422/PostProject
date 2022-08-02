@@ -57,14 +57,14 @@ export const { actions } = Bouncer.before((usuario: Usuario | null) => {
   })
 
   .define('editPost', (usuario: Usuario, articulos: Articulo) => {
-    if (articulos.TipoEstado === 'PUBLICADO') {
+    if (articulos.tipoEstado === 'PUBLICADO') {
       return true
     } else if (
-      (articulos.TipoEstado === 'PROPUESTA' || articulos.TipoEstado === 'RECHAZADO') &&
+      (articulos.tipoEstado === 'PROPUESTA' || articulos.tipoEstado === 'RECHAZADO') &&
       usuario?.tipoRol === 'ESCRITOR'
     ) {
       return true
-    } else if (articulos.TipoEstado === 'PENDIENTE_REVISION' && usuario?.tipoRol === 'REVISOR') {
+    } else if (articulos.tipoEstado === 'PENDIENTE_REVISION' && usuario?.tipoRol === 'REVISOR') {
       return true
     }
     return Bouncer.deny('El artículo no esta publicado', 404)
@@ -73,14 +73,14 @@ export const { actions } = Bouncer.before((usuario: Usuario | null) => {
   .define(
     'viewPost',
     (usuario: Usuario | null, articulos: Articulo) => {
-      if (articulos.TipoEstado === 'PUBLICADO') {
+      if (articulos.tipoEstado === 'PUBLICADO') {
         return true
       } else if (
-        (articulos.TipoEstado === 'PROPUESTA' || articulos.TipoEstado === 'RECHAZADO') &&
+        (articulos.tipoEstado === 'PROPUESTA' || articulos.tipoEstado === 'RECHAZADO') &&
         usuario?.tipoRol === 'ESCRITOR'
       ) {
         return true
-      } else if (articulos.TipoEstado === 'PENDIENTE_REVISION' && usuario?.tipoRol === 'REVISOR') {
+      } else if (articulos.tipoEstado === 'PENDIENTE_REVISION' && usuario?.tipoRol === 'REVISOR') {
         return true
       }
       return Bouncer.deny('El artículo no esta publicado', 404)
